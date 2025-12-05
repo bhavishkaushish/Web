@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VedGyan – Deep Vedic Learning for Children</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Hind+Siliguri:wght@400;600&family=Poppins:wght@300;600&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root { --saffron:#FF6B35; --green:#27AE60; --gold:#F1C40F; --blue:#3498DB; --purple:#9B59B6; --dark:#2C3E50; --light:#FFF8F0; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#FFF3E0,#FFE0B2); color:#333; line-height:1.8; }
+    header { background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&q=80'); background-size:cover; color:white; text-align:center; padding:140px 20px; }
+    h1 { font-family:'Baloo 2',cursive; font-size:4.5rem; text-shadow:0 0 30px rgba(255,107,53,0.8); }
+    .subtitle { font-size:1.8rem; font-family:'Hind Siliguri'; margin:20px 0 10px; }
+    .modules { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:35px; padding:70px 5%; max-width:1600px; margin:auto; }
+    .card { background:white; border-radius:28px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.15); transition:0.5s; cursor:pointer; }
+    .card:hover { transform:translateY(-25px) scale(1.04); box-shadow:0 40px 80px rgba(255,107,53,0.4); }
+    .card-header { height:200px; display:flex; align-items:center; justify-content:center; font-size:6rem; color:white; }
+    .card:nth-child(1) .card-header { background:linear-gradient(45deg,#FF6B35,#E67E22); }
+    .card:nth-child(2) .card-header { background:linear-gradient(45deg,#3498DB,#2980B9); }
+    .card:nth-child(3) .card-header { background:linear-gradient(45deg,#9B59B6,#8E44AD); }
+    .card:nth-child(4) .card-header { background:linear-gradient(45deg,#27AE60,#2ECC71); }
+    .card:nth-child(5) .card-header { background:linear-gradient(45deg,#E74C3C,#C0392B); }
+    .card:nth-child(6) .card-header { background:linear-gradient(45deg,#F1C40F,#F39C12); }
+    .card:nth-child(7) .card-header { background:linear-gradient(45deg,#1ABC9C,#16A085); }
+    .card:nth-child(8) .card-header { background:linear-gradient(45deg,#34495E,#2C3E50); }
+    .card h3 { font-size:2rem; text-align:center; padding:20px 10px 10px; }
+    .card p { padding:0 25px 25px; text-align:center; color:#555; }
+
+    .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); justify-content:center; align-items:center; padding:20px; overflow-y:auto; }
+    .modal-content { background:white; border-radius:30px; max-width:1100px; width:100%; max-height:95vh; overflow-y:auto; box-shadow:0 30px 100px rgba(0,0,0,0.5); }
+    .close { float:right; font-size:3.5rem; font-weight:bold; padding:10px 25px; cursor:pointer; color:#aaa; }
+    .close:hover { color:#000; }
+    .lesson { padding:50px; }
+    .section { margin:40px 0; padding:25px; background:#f9f9f9; border-radius:20px; border-left:8px solid var(--saffron); }
+    .shlok { background:#FFF3E0; padding:30px; margin:30px 0; border-radius:15px; border-right:10px solid var(--saffron); font-size:1.5rem; }
+    .shlok .dev { font-size:2.4rem; font-weight:bold; color:var(--saffron); line-height:2.4; font-family:'Noto Sans Devanagari'; }
+    .shlok .hindi { color:#444; margin:15px 0; font-size:1.3rem; }
+    .shlok .eng { font-style:italic; color:#666; }
+    .quiz, .calc, .dragbox { background:#EBF5FB; padding:30px; border-radius:20px; margin:35px 0; text-align:center; border:4px dashed #3498DB; }
+    button { background:var(--saffron); color:white; border:none; padding:14px 30px; margin:8px; border-radius:50px; font-size:1.1rem; cursor:pointer; transition:0.3s; }
+    button:hover { background:#E55A2B; transform:scale(1.08); }
+    .correct { background:#27AE60 !important; }
+    .wrong { background:#E74C3C !important; }
+    input { padding:12px; width:200px; margin:10px; border-radius:10px; border:2px solid #ccc; font-size:1.1rem; }
+    footer { background:var(--dark); color:white; text-align:center; padding:60px; font-size:1.3rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>VedGyan</h1>
+  <p class="subtitle">वेदों और उपनिषदों से गहराई तक सीखें विज्ञान, गणित और जीवन</p>
+  <p>Super Rich • Fully Interactive • Class 3–8</p>
+</header>
+
+<div class="modules">
+  <div class="card" onclick="openModal('vedicmath')"><div class="card-header"><i class="fas fa-calculator"></i></div><h3>Vedic Mathematics</h3><p>16 सूत्र + 50+ Examples & Games</p></div>
+  <div class="card" onclick="openModal('physics')"><div class="card-header"><i class="fas fa-atom"></i></div><h3>Physics in Vedas</h3><p>Light, Sound, Gravity, Energy</p></div>
+  <div class="card" onclick="openModal('chemistry')"><div class="card-header"><i class="fas fa-flask"></i></div><h3>Panchmahābhūta & Rasa</h3><p>Atoms, Elements, Ayurveda Chemistry</p></div>
+  <div class="card" onclick="openModal('biology')"><div class="card-header"><i class="fas fa-leaf"></i></div><h3>Biology & Evolution</h3><p>Prāna, DNA, Surgery 3000 yrs ago</p></div>
+  <div class="card" onclick="openModal('astronomy')"><div class="card-header"><i class="fas fa-star-and-crescent"></i></div><h3>Vedic Astronomy</h3><p>27 Nakshatras, Earth is Round & Rotating</p></div>
+  <div class="card" onclick="openModal('environment')"><div class="card-header"><i class="fas fa-tree"></i></div><h3>Yajna & Ecology</h3><p>Pollution Control 5000 yrs ago</p></div>
+  <div class="card" onclick="openModal('yoga')"><div class="card-header"><i class="fas fa-pray"></i></div><h3>Yoga & Brain Science</h3><p>Chakras, Concentration, Memory</p></div>
+  <div class="card" onclick="openModal('shlokas')"><div class="card-header"><i class="fas fa-om"></i></div><h3>50 Golden Shlokas</h3><p>With Word-to-Word Meaning</p></div>
+</div>
+
+<div id="modal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal()">×</span><div id="modal-body" class="lesson"></div></div></div>
+
+<footer>
+  <p>Made with ∞ Love for Bharat’s Eternal Knowledge by Bhavish Sharma of Astha's Creative Academy | VedGyan 2025</p>
+  <p>ॐ असतो मा सद्गमय । तमसो मा ज्योतिर्गमय । मृत्योर्मा अमृतं गमय ॥</p>
+</footer>
+
+<script>
+const content = {
+  vedicmath: `
+    <h2 style="text-align:center;color:var(--saffron);">वेदिक गणित – 16 सूत्र + ढेर सारे खेल</h2><br>
+
+    <div class="section">
+      <h3>1. एकाधिकेन पूर्वेन – Squaring numbers ending with 5</h3>
+      <p>25×25 → 2×3 | 5×5 → <strong>625</strong><br>
+      35×35 → 3×4 | 25 → <strong>1225</strong><br>
+      115×115 → 11×12 | 25 → <strong>13225</strong></p>
+    </div>
+
+    <div class="section">
+      <h3>2. ऊर्ध्व तिर्यग्भ्याम् – Vertical & Crosswise Multiplication</h3>
+      <p>23 × 31 = ?<br>
+      2×3 = 6<br>
+      (2×1 + 3×3) = 11 → carry 1<br>
+      3×1 = 3 +1 = 4<br>
+      → <strong>713</strong></p>
+    </div>
+
+    <div class="calc">
+      <h3>Live Vedic Squaring Calculator</h3>
+      <input type="number" id="sqnum" placeholder="Enter number ending 5">
+      <button onclick="vedicSquare()">Calculate Square!</button>
+      <h3 id="sqresult" style="margin-top:20px;color:var(--saffron);font-size:2rem;"></h3>
+    </div>
+
+    <div class="section">
+      <h3>3. निकिलं नवतश्चरमं दशतः – Multiply near 100/1000</h3>
+      <p>88 × 94 = ?<br>
+      100−12 | 100−6<br>
+      100 − (12+6) = 82<br>
+      (−12)×(−6) = 72<br>
+      → <strong>8272</strong></p>
+    </div>
+
+    <div class="quiz">
+      <h3>Challenge: 997 × 994 = ?</h3>
+      <button onclick="this.classList.add('correct');alert('Wow! 991,018')">991018</button>
+      <button onclick="this.classList.add('wrong');alert('Try again!')">990018</button>
+      <button onclick="this.classList.add('wrong');alert('Try again!')">992018</button>
+    </div>
+
+    <p style="font-size:1.4rem;margin-top:50px;">और भी 13 सूत्र हैं – एक बार में सब याद कर लो!</p>
+  `,
+
+  physics: `
+    <h2 style="text-align:center;color:var(--blue);">वेदों में आधुनिक भौतिकी के बीज</h2>
+
+    <div class="shlok">
+      <div class="dev">अनेजदेकं मनसो जवीय नैनद्वा आप्नुवन् पूर्वमर्षत् ।</div>
+      <div class="hindi">वह एक है, स्थिर है, पर मन से भी तेज़ है – देवता भी इसे पहले नहीं पकड़ सके।</div>
+      <div class="eng">→ Speed of light is finite and faster than mind!</div>
+    </div>
+
+    <div class="section">
+      <h3>Sayana (14th century) calculation on Rigveda 1.50</h3>
+      <p>Speed of sunlight = 2,202 yojana in ½ nimeṣa<br>
+      = ≈ 186,536 miles/second → <strong>almost exact modern value 186,282 miles/sec!</strong></p>
+    </div>
+
+    <div class="shlok">
+      <div class="dev">नैनं छिन्दन्ति शस्त्राणि नैनं दहति पावकः ।</div>
+      <div class="eng">“No weapon can cut it, fire cannot burn it” – Bhagavad Gita 2.23<br>
+      → Same as Law of Conservation of Energy!</div>
+    </div>
+
+    <div class="section">
+      <h3>Sound & Akasha</h3>
+      <p>Rigveda says sound travels through आकाश तत्त्व (ether). Modern physics rediscovered “luminiferous ether” concept later.</p>
+    </div>
+
+    <div class="quiz">
+      <h3>Who said “Energy can neither be created nor destroyed” first?</h3>
+      <button onclick="this.classList.add('correct')">Vedas (5000 yrs ago)</button>
+      <button onclick="this.classList.add('wrong')">Einstein</button>
+      <button onclick="this.classList.add('wrong')">Newton</button>
+    </div>
+  `,
+
+  chemistry: `
+    <h2 style="text-align:center;color:var(--purple);">पञ्चमहाभूत – असली परमाणु सिद्धान्त</h2>
+
+    <div class="section">
+      <h3>Kanada’s Vaisheshika Sutra (600 BCE)</h3>
+      <p>परमाणु (Anu) = indivisible atom<br>
+      द्वयणुक (Dwynuka) = molecule of two atoms<br>
+      त्रसरेणु = particle visible in sunbeam → exactly matches modern particulate theory!</p>
+    </div>
+
+    <div class="section">
+      <h3>Five states of matter in Taittiriya Upanishad</h3>
+      <ol>
+        <li>आकाश → Space/Field</li>
+        <li>वायु → Gas</li>
+        <li>अग्नि → Plasma/Energy</li>
+        <li>जल → Liquid</li>
+        <li>पृथ्वी → Solid</li>
+      </ol>
+      <p>Exactly same order as modern physics + plasma!</p>
+    </div>
+
+    <div class="shlok">
+      <div class="dev">अन्नात् पुरुषः । पुरुषाद् वाक् ।</div>
+      <div class="eng">From food comes body, from body comes speech, mind, prāna → food chemistry!</div>
+    </div>
+
+    <div class="section">
+      <h3>Rasa Shastra – Ancient Chemistry</h3>
+      <p>Parad (Mercury) purified 18 times becomes medicine – modern nanotechnology uses same principle.</p>
+    </div>
+  `,
+
+  biology: `
+    <h2 style="text-align:center;color:var(--green);">जीव विज्ञान और विकास क्रम वेदों में</h2>
+
+    <div class="section">
+      <h3>Dashavatara = Theory of Evolution</h3>
+      <p>Matsya → Jalchar (Fish) → Kūrma Ubbhaychar (Amphibian) → Varāha Terrestrial → Narasimha Half-man → Vāmana Dwarf → Parashurama → Rama → Krishna → Kalki (future)</p>
+    </div>
+
+    <div class="shlok">
+      <div class="dev">यतो वा इमानि भूतानि जायन्ते ।</div>
+      <div class="eng">Taittiriya Upanishad – “From which all beings are born” → Big Bang + Evolution hint</div>
+    </div>
+
+    <div class="section">
+      <h3>Sushruta Samhita (600 BCE)</h3>
+      <ul>
+        <li>Plastic surgery (nose reconstruction)</li>
+        <li>Cataract surgery with needle</li>
+        <li>118 surgical instruments</li>
+        <li>Concept of शुक् (sperm) + आर्तव (ovum) → genetics!</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>Prāna = Life Force</h3>
+      <p>Prāna, Apāna, Vyāna, Udāna, Samāna – 5 types → matches modern respiratory & circulatory science.</p>
+    </div>
+  `,
+
+  astronomy: `
+    <h2 style="text-align:center;color:#E74C3C;">वैदिक खगोल विज्ञान – 7000 साल पुराना</h2>
+
+    <div class="section">
+      <h3>Rigveda 10.149.1</h3>
+      <p>पृथ्वी गोल है और अपनी धुरी पर घूमती है (Earth is spherical and rotates).</p>
+    </div>
+
+    <div class="section">
+      <h3>Exact year length</h3>
+      <p>Vedanga Jyotisha: 1 year = 365.2422 days → more accurate than Gregorian 365.2425!</p>
+    </div>
+
+    <div class="section">
+      <h3>27 Nakshatras + Abhijit = 28</h3>
+      <p>Used for extremely accurate calendar even today in Hindu panchang.</p>
+    </div>
+
+    <div class="section">
+      <h3>Heliocentric hints</h3>
+      <p>Shatapatha Brahmana: “Sun never sets or rises – Earth rotates”.</p>
+    </div>
+  `,
+
+  environment: `
+    <h2 style="text-align:center;color:var(--green);">यज्ञ = विश्व का पहला Pollution Control System</h2>
+
+    <div class="section">
+      <p>Scientific studies (NCL Pune): Havan smoke kills 94% bacteria and releases negative ions.</p>
+    </div>
+
+    <div class="shlok">
+      <div class="dev">द्यौः शान्तिः अन्तरिक्षं शान्तिः पृथिवी शान्तिः ।</div>
+      <div class="eng">May sky, space, earth, water, plants all be peaceful – first environmental prayer!</div>
+    </div>
+
+    <div class="section">
+      <h3>Trees are sacred</h3>
+      <p>Peepal releases oxygen 24×7 → called कल्पवृक्ष.</p>
+    </div>
+  `,
+
+  yoga: `
+    <h2 style="text-align:center;">योग = मस्तिष्क और शरीर का विज्ञान</h2>
+
+    <div class="section">
+      <h3>8 limbs of Patanjali</h3>
+      <p>Yama, Niyama, Asana, Pranayama, Pratyahara, Dharana, Dhyana, Samadhi → proven by Harvard, Yale studies to increase grey matter.</p>
+    </div>
+
+    <div class="section">
+      <h3>Chakras = Real nerve plexuses</h3>
+      <p>Muladhara → pelvic, Swadhisthana → sacral, Manipura → solar, Anahata → cardiac… exact match!</p>
+    </div>
+
+    <div class="calc">
+      <h3>Try 4-7-8 Breathing</h3>
+      <button onclick="alert('Inhale 4 sec → Hold 7 sec → Exhale 8 sec → Repeat 4 times')">Start Breathing Exercise</button>
+    </div>
+  `,
+
+  shlokas: `
+    <h2 style="text-align:center;color:var(--dark);">50 स्वर्णिम श्लोक – हर बच्चे को पता होने चाहिए</h2>
+
+    <div class="shlok"><div class="dev">ॐ सह नाववतु । सह नौ भुनक्तु । सह वीर्यं करवावहै ।</div><div class="hindi">हम साथ में रक्षा पाएं, साथ में पढ़ें, साथ में शक्ति से कार्य करें।</div></div>
+
+    <div class="shlok"><div class="dev">विद्या विनयं ददाति । विनयाद् याति पात्रताम् ।</div><div class="eng">Knowledge → Humility → Worthiness → Wealth → Dharma → Happiness</div></div>
+
+    <div class="shlok"><div class="dev">ॐ पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते ।</div><div class="eng">Infinity minus infinity is still infinity – Zero & Infinity concept!</div></div>
+
+    <div class="shlok"><div class="dev">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।</div><div class="eng">You have right only on action, never on results.</div></div>
+
+    <div class="shlok"><div class="dev">माता च पार्वती देवी पिता देवो महेश्वरः ।</div><div class="eng">Mother is goddess, Father is god – respect parents.</div></div>
+
+    <p style="text-align:center;margin-top:50px;font-size:1.5rem;">…और भी 45 श्लोक हैं! रोज एक नया श्लोक याद करो!</p>
+  `
+};
+
+// Live Vedic Squaring Function
+function vedicSquare() {
+  let n = document.getElementById("sqnum").value;
+  if(n % 10 !== 5) { alert("Please enter number ending with 5"); return; }
+  let a = Math.floor(n/10);
+  let sq = a*(a+1) + "25";
+  document.getElementById("sqresult").innerHTML = n + "×" + n + " = <strong>" + sq + "</strong> ✨";
+}
+
+function openModal(id) {
+  document.getElementById("modal-body").innerHTML = content[id];
+  document.getElementById("modal").style.display = "flex";
+  window.scrollTo(0,0);
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+window.onclick = function(e) {
+  if(e.target === document.getElementById("modal")) closeModal();
+}
+</script>
+</body>
+</html>
